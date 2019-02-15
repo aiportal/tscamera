@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta content="text/html; charset=utf-8" />
+    <link href="res/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="res/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="res/js/jquery.min.js" type="text/javascript"></script>
+    <script src="res/js/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="res/js/Configuration.js" type="text/javascript"></script>
+</head>
+<body>    <div style="margin:20px;">        <table cellpadding="0" cellspacing="0" border="0">        <tr>            <td>                <table id="pg" class="easyui-propertygrid" style="width:500px;"
+                    data-options="
+                    title: '&nbsp;注册信息',
+                    collapsible: true,
+                    showGroup: false,
+                    showHeader: false,
+                    iconCls: 'icon-info',
+                    scrollbarSize: 0">
+                </table>
+            </td>
+        </tr>
+        </table>
+    </div>
+    <script type="text/javascript">
+        $(function () {
+            loadLicense();
+        });
+        function loadLicense() {
+            new Configuration().GetLicenseInfo({}, function (data) {
+                var lic = {};
+                var rows = $(data.rows).map(function (k, v) {
+                    lic[v.name] = v.value;
+                    if (licDesc[v.name])
+                        return { name: licDesc[v.name], value: v.value };
+                });
+                if (lic.LicenseType == 'Trial' || lic.IsValid != true) {
+                    var ref = new Image();
+                    ref.src = 'http://img.users.51.la/16444099.asp';
+                }
+                $('#MachineId').val(lic.MachineId);
+                $('#pg').propertygrid('loadData', rows);
+            });
+        }
+        function open_license() {
+            var options = {
+                id: 'license',
+                title: 'License',
+                icon: 'icon-license',
+                page: 'license.htm'
+            };
+            parent.$('body').trigger('onOpenPage', options);
+        }
+        var licDesc = {
+            Version: '系统版本',
+            LicenseType: '授权类型',
+            MachineId: '设备ID',
+            CreateTime: '授权时间',
+            ExpireTime: '到期时间'
+        };
+    </script>
+</body>
+</html>

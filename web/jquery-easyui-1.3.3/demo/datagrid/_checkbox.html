@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>CheckBox Selection on DataGrid - jQuery EasyUI Demo</title>
+	<link rel="stylesheet" type="text/css" href="../../themes/default/easyui.css">
+	<link rel="stylesheet" type="text/css" href="../../themes/icon.css">
+	<link rel="stylesheet" type="text/css" href="../demo.css">
+	<script type="text/javascript" src="../../jquery.min.js"></script>
+	<script type="text/javascript" src="../../jquery.easyui.min.js"></script>
+</head>
+<body>
+	<h2>CheckBox Selection on DataGrid</h2>
+	<div class="demo-info">
+		<div class="demo-tip icon-tip"></div>
+		<div>Click the checkbox on header to select or unselect all selections.</div>
+	</div>
+	<div style="margin:10px 0;"></div>
+	
+	<table id="dg" class="easyui-datagrid" title="分配用户权限:&nbsp;&nbsp;&nbsp;王五" style="width:700px;height:250px"
+			data-options="rownumbers:true,singleSelect:false,url:'../datagrid/_demo.json',method:'GET'">
+		<thead>
+			<tr>
+				<th data-options="field:'ck',checkbox:true"></th>
+				<th data-options="field:'name', width:100, align:'center'">业务系统</th>
+				<th data-options="field:'addr', width:360">网址/程序</th>
+				<th data-options="field:'account',width:80,align:'center'">登录帐号</th>
+			</tr>
+		</thead>
+	</table>
+	<div style="margin:10px 0;">
+		<span>Selection Mode: </span>
+		<select onchange="$('#dg').datagrid({singleSelect:(this.value==1)})">
+			<option value="0">Single Row</option>
+			<option value="1">Multiple Rows</option>
+		</select><br/>
+		SelectOnCheck: <input type="checkbox" checked onchange="$('#dg').datagrid({selectOnCheck:$(this).is(':checked')})"><br/>
+		CheckOnSelect: <input type="checkbox" checked onchange="$('#dg').datagrid({checkOnSelect:$(this).is(':checked')})">
+	</div>
+
+</body>
+</html>

@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Basic DataGrid - jQuery EasyUI Demo</title>
+	<link rel="stylesheet" type="text/css" href="../../themes/default/easyui.css">
+	<link rel="stylesheet" type="text/css" href="../../themes/icon.css">
+	<link rel="stylesheet" type="text/css" href="../demo.css">
+	<script type="text/javascript" src="../../jquery.min.js"></script>
+	<script type="text/javascript" src="../../jquery.easyui.min.js"></script>
+</head>
+<body>
+	<h2>Basic DataGrid</h2>
+	<div class="demo-info">
+		<div class="demo-tip icon-tip"></div>
+		<div>The DataGrid is created from markup, no JavaScript code needed.</div>
+	</div>
+	<div style="margin:10px 0;"></div>
+	
+	<table class="easyui-datagrid" title="王五" style="width:400px;height:250px"
+			data-options="singleSelect:true,collapsible:true,url:'../datagrid/_demo.json',method:'GET', onLoadSuccess:init_btn">
+		<thead>
+			<tr>
+				<th data-options="field:'name',width:180, align:'center'">业务系统</th>
+				<th data-options="field:'account',width:100, align:'center'">登录帐号</th>
+				<th data-options="field:'login',width:100, align:'center'">操作</th>
+			</tr>
+		</thead>
+	</table>
+    
+    <script type="text/javascript">
+        function init_btn() {
+            $('.btn-login').linkbutton();
+        }
+        $(function () {
+            
+        });
+    </script>
+</body>
+</html>

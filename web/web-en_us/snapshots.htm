@@ -1,0 +1,82 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta content="text/html; charset=utf-8" />
+    <link href="res/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="res/themes/icon.css" rel="stylesheet" type="text/css" />
+
+    <script src="res/js/jquery.min.js" type="text/javascript"></script>
+    <script src="res/js/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="res/js/datagrid-groupview.js" type="text/javascript"></script>
+
+    <script src="res/js/DataQuery.js" type="text/javascript"></script>
+    <script src="res/js/common.js" type="text/javascript"></script>
+    <style type="text/css">
+        .grid_header{ border-top-width: 0px; }
+    </style>
+</head>
+<body>
+	<table id="dgrid" title="">
+		<thead>
+			<tr>
+                <th field='Time' width="100px" align="center" sortable="true" >Time</th>
+                <th field='Prog' width="120px" sortable="true" >Program</th>
+                <th field='Title' width="600px" sortable="true" >Window Title</th>
+                <th field='Count' width="80px" align="center" sortable="true" >Snap Count</th>
+                <th field="_movie" width="100px" align="center" >Movie</th>
+			</tr>
+		</thead>
+	</table>
+
+    <div style="display:none;">
+        <div id="toolbar" style="padding:5px;height:auto;">
+            <a href="#" class="easyui-linkbutton" iconCls="icon-collapse" onclick="$('#dgrid').datagrid('collapseGroup');"></a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-expand" onclick="$('#dgrid').datagrid('expandGroup');"></a>
+	    </div>
+    </div>
+
+    <script type="text/javascript">
+
+        var ps = url_parameters();
+        $('#dgrid').datagrid({
+            noheader: false,
+            fit: true,
+            rownumbers: true,
+            striped: true,
+            showFooter: true,
+            singleSelect: true,
+            remoteSort: false,
+
+            title: ps.desc,
+            headerCls: 'grid_header',
+            toolbar: '#toolbar',
+            groupField: 'Prog',
+            view: groupview,
+            groupFormatter: function (value, rows) {
+                return '<a class="btn-group"><strong>' + value + '</strong> - ' + rows.length + ' Item(s)</a>';
+            },
+            loader: function (param, success, error) {
+                function filter(objs) {
+                    $(objs).each(function (k, v) {
+                        v._movie = '<a class="btn-movie" href="#"></a>';
+                    });
+                    success(objs);
+                }
+                new DataQuery().GetSnapshots({ sid: ps.sid }, filter, error);
+            },
+            onLoadSuccess: function (objs) {
+                $('.btn-movie').linkbutton({ text: 'Play', iconCls: 'icon-play' });
+                $('.btn-group').linkbutton({ iconCls: 'icon-program', plain: true })
+                        .click(function () { $('#dgrid').datagrid('toggleGroup', this); })
+                        .css('padding', '0 50px 0 50px');
+            },
+            onClickCell: function (idx, field, value) {
+                var row = $('#dgrid').datagrid('getRows')[idx];
+                if (field == '_movie')
+                    parent.$('body').trigger('onPopMovie', row);
+            }
+        });
+    </script>
+</body>
+</html>

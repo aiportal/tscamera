@@ -1,0 +1,135 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta content="text/html; charset=utf-8" />
+    <link href="res/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="res/themes/icon.css" rel="stylesheet" type="text/css" />
+
+    <script src="res/js/jquery.min.js" type="text/javascript"></script>
+    <script src="res/js/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="res/js/datagrid-groupview.js" type="text/javascript"></script>
+
+    <script src="res/js/DataQuery.js" type="text/javascript"></script>
+    <script src="res/js/common.js" type="text/javascript"></script>
+    <style type="text/css">
+        .grid_body{ border-top-width:0px; }
+    </style>
+</head>
+<body>
+    <table id="dgrid" title="">
+		<thead>
+			<tr>
+                <th field="User" width="100" align="center" sortable="true">用户</th>
+                <th field="Date" width="80" align="center" sortable="true">日期</th>
+                <th field="Time" width="100" align="center" sortable="true" >时间</th>
+                <th field="Host" width="180" align="center" sortable="true">网站</th>
+                <th field='Url' width="600" align="left" sortable="true" formatter="fmt_url" >网址</th>
+                <th field='Count' width="80" align="center" sortable="true">快照数量</th>
+                <th field="_movie" align="center" >回放</th>
+			</tr>
+		</thead>
+	</table>
+
+    <div style="display:none;">
+        <div id="toolbar" style="padding:5px;height:auto;">
+		    日期 从: <input id="start" class="easyui-datebox" style="width:100px" required />
+		    到: <input id="end" class="easyui-datebox" style="width:100px" required />
+            用户: <input id="user" style="width:120px;" />
+            网站: <input id="host" style="width:160px;" />            关键词: <input id="keyword" class="easyui-searchbox" searcher="do_search" style="width:160px;" />		    <a href="#" class="easyui-linkbutton" onclick="$('#dgrid').datagrid('load', this);">搜索</a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-collapse" onclick="$('#dgrid').datagrid('collapseGroup');"></a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-expand" onclick="$('#dgrid').datagrid('expandGroup');"></a>
+	    </div>
+    </div>
+
+    <script type="text/javascript">
+        $(function () {
+            $('#start').datebox('setValue', date_value(0));
+            $('#end').datebox('setValue', date_value(0));
+            $('#user').combobox({
+                //editable: false,
+                panelHeight: 'auto',
+                valueField: 'Name',
+                textField: 'Name',
+                loader: function (param, success, error) {
+                    new DataQuery().GetUsers(param, success, error);
+                }
+            });
+            $('#host').combobox({
+                //editable: false,
+                panelHeight: '300',
+                valueField: 'Name',
+                textField: 'Name',
+                loader: function (param, success, error) {
+                    new DataQuery().GetHosts(param, success, error);
+                }
+            });
+        });
+
+        $('#dgrid').datagrid({
+            noheader: true,
+            fit: true,
+            rownumbers: true,
+            striped: true,
+            showFooter: true,
+            singleSelect: true,
+            remoteSort: false,
+            bodyCls: 'grid_body',
+            toolbar: '#toolbar',
+
+            // group
+            groupField: 'Date',
+            view: groupview,
+            groupFormatter: function (value, rows) {
+                return '<a class="btn-group"><strong>' + value + '</strong> - ' + rows.length + ' Item(s)</a>';
+            },
+
+            // data
+            loader: function (param, success, error) {
+                if (param && param.href) {
+                    param = {
+                        start: $('#start').datebox('getValue'),
+                        end: $('#end').datebox('getValue'),
+                        user: $('#user').combobox('getValue'),
+                        host: $('#host').combobox('getValue'),
+                        url: $('#keyword').searchbox('getValue')
+                    };
+                    function filter(objs) {
+                        $(objs).each(function (k, v) {
+                            v._movie = '<a class="btn-movie" href="#"></a>';
+                        });
+                        success(objs);
+                    }
+                    new DataQuery().SearchUrl(param, filter, error);
+                }
+                else {
+                    return false;
+                }
+            },
+            onLoadSuccess: function (objs) {
+                $('.btn-movie').linkbutton({ text: 'Play', iconCls: 'icon-play' });
+                $('.btn-group').linkbutton({ iconCls: 'icon-calendar', plain: true })
+                    .click(function () { $('#dgrid').datagrid('toggleGroup', this); })
+                    .css('padding', '0 50px 0 50px');
+            },
+            onLoadError: function (objs) {
+                $.messager.alert('Error', 'Request error.', 'error');
+            },
+            onClickCell: function (idx, field, value) {
+                var row = $('#dgrid').datagrid('getRows')[idx];
+                if (field == '_movie')
+                    parent.$('body').trigger('onPopMovie', row);
+            }
+        });
+
+        function do_search() {
+            $('#dgrid').datagrid('load', window.location);
+        }
+        function fmt_url(val, row) {
+            return bold_format(val, $('#keyword').searchbox('getValue'));
+        }
+
+    </script>
+
+</body>
+</html>

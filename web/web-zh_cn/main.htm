@@ -1,0 +1,134 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>TSCamera</title>
+    <meta content="text/html; charset=utf-8" />
+    <link href="res/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="res/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="res/js/jquery.min.js" type="text/javascript"></script>
+    <script src="res/js/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="res/js/jquery.md5.js" type="text/javascript"></script>
+
+    <script src="res/js/DataQuery.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        var Admin = function () {
+            this.name = '/login.htm';
+            this.Login = function (p, func) { return this.implement('Login', p, func); };
+            this.Login.params = { user: '', pwd: '' };
+            this.Logout = function (p, func) { return this.implement('Logout', p, func); };
+            this.Logout.params = {};
+        };
+        Admin.prototype = DataQuery.prototype;
+    </script>
+    
+    <style type="text/css">
+        .menu_button { width:100%; text-align:left; padding-left:5px; }
+        .tab_frame { width:100%; height:100%; border:0px; }
+        .bottom_region{ text-align:center; vertical-align:middle; color:Blue; padding:5px; border-bottom:0px; border-left:0px; border-right:0px; }
+    </style>
+</head>
+<body class="easyui-layout">
+    <div data-options="region:'north', border:true" style="height:50px; border-left-width:0px; border-top-width:0px; border-right-width:0px; overflow:hidden;">
+        <!-- Logo, current date, username ext.-->
+        <div style="float:right; padding-right:30px;">
+            <br />
+            欢迎使用 TSCamera 终端审计系统
+            &nbsp;&nbsp;
+            [<a href="#" onclick="btn_logout()">注销</a>]
+        </div>
+        <div>
+            <img src="res/img/logo.png" alt="Terminal Camera" style="position:absolute; left:-150px;" />
+        </div>
+    </div>
+    <div data-options="region:'west', split:true, noheader:true, width:138, maxWidth:200" >
+        <div class="easyui-accordion" data-options="fit:true, border:false">
+            <div title="　查询搜索" iconCls="icon-search" style="overflow:hidden;">
+                <a id="btn_sessions" href="#" class="easyui-linkbutton menu_button" data-options="plain:true, iconCls:'icon-chat'" onclick="on_menu(this);"                    title="Terminal session list">会话</a>                <a id="btn_search_title" href="#" class="easyui-linkbutton menu_button" data-options="plain:true, iconCls:'icon-films'" onclick="on_menu(this);"                    title="Search snapshots by window title">标题</a>                <a id="btn_search_url" href="#" class="easyui-linkbutton menu_button" data-options="plain:true, iconCls:'icon-web'" onclick="on_menu(this);"                    title="Search snapshots by url">网址</a>                <a id="btn_search_file" href="#" class="easyui-linkbutton menu_button" data-options="plain:true, iconCls:'icon-file'" onclick="on_menu(this);"                    title="Search snapshots by file path">文件</a>            </div>
+            <div title="　统计分析" iconCls="icon-chart" style="overflow:hidden;">
+                <a id="btn_stat_hour" href="#" class="easyui-linkbutton menu_button" data-options="plain:true, iconCls:'icon-computer'" onclick="on_menu(this);"
+                    title="Count user's busy or free for hours in day">使用时间</a>
+                <a id="btn_stat_prog" href="#" class="easyui-linkbutton menu_button" data-options="plain:true, iconCls:'icon-program'" onclick="on_menu(this);"
+                    title="Count frequency of use for program">应用程序</a>
+                <a id="btn_stat_host" href="#" class="easyui-linkbutton menu_button" data-options="plain:true, iconCls:'icon-web'" onclick="on_menu(this);"
+                    title="Count frequency of visit for website">访问网站</a>
+            </div>
+            <div title="　系统设置" iconCls="icon-options" style="overflow:hidden;">
+                <a id="btn_parameters" href="#" class="easyui-linkbutton menu_button" data-options="plain:true, iconCls:'icon-config'" onclick="on_menu(this);"                    title="Configuration system parameters">系统参数</a>                <a id="btn_policy" href="#" class="easyui-linkbutton menu_button" data-options="plain:true, iconCls:'icon-filter'" onclick="on_menu(this);"                    title="Configuration monitoring policy">审计策略</a>                <a id="btn_license" href="#" class="easyui-linkbutton menu_button" data-options="plain:true, iconCls:'icon-license'" onclick="on_menu(this);"                    title="Register Terminal Camera by license key">授权信息</a>                <a id="btn_pwd" href="#" class="easyui-linkbutton menu_button" data-options="plain:true, iconCls:'icon-key'" onclick="on_menu(this);"                    title="Change admin user's password">管理密码</a>            </div>
+        </div>
+    </div>
+    <div data-options="region:'center',iconCls:'icon-ok'" title="">
+        <div id="tabs" class="easyui-tabs" data-options="fit:true, border:false, plain:true, showHeader:false" style="padding-top:5px;">
+            <div title="" data-options="closable:false, iconCls:'icon-info'" >
+                <iframe src="welcome.htm" scrolling="auto" frameborder="0" style="width:100%;height:100%;"></iframe>
+            </div>
+        </div>
+    </div>
+    <!--<div id="ad" data-options="region:'east', collapsible:false" style="width: 200px;">-->
+    </div>
+    <div data-options="region:'south'" class="bottom_region">
+        Copyright <font face="Verdana">©</font> 2013 TSCamera All rights reserved.
+    </div>
+
+    <script type="text/javascript">
+        function on_menu(m) {
+            var id = m.id.replace('btn_', '');
+            var options = {
+                id: id,
+                title: $(m).text(),
+                icon: $(m).linkbutton('options').iconCls,
+                page: id + '.htm'
+            };
+            open_page(options);
+        }
+        function open_page(ps) {
+            if (!selectTab('#' + ps.id)) {
+                $('#tabs').tabs('add', {
+                    id: ps.id,
+                    title: ps.title,
+                    iconCls: ps.icon,
+                    content: '<iframe src="' + ps.page + '" class="tab_frame"></iframe>',
+                    closable: true
+                });
+            }
+            $('#tabs iframe').parent().css('overflow', 'hidden');
+        }
+
+        $('body').bind('onOpenPage', function (e, ps) {
+            open_page(ps);
+        });
+
+        $('body').bind('onPopMovie', function (e, row) {
+            var url = 'movie.htm?';
+            url += '&sid=' + row.SID.replace(/-/g, '');
+            if (row.Program)
+                url += '&prog=' + escape(row.Program);
+            if (row.Title)
+                url += '&title=' + $.md5(row.Title);
+            if (row.Host)
+                url += '&host=' + escape(row.Host);
+            if (row.Url)
+                url += '&url=' + $.md5(row.Url);
+            window.open(url, 'movie', 'width=900,height=600,toolbar=no,menubar=no,scrollbars=no,resizable=yes,location=no,status=no');
+        });
+
+        function selectTab(selector) {
+            var tab = $(selector);
+            if (tab.length > 0) {
+                var idx = $('#tabs').tabs('getTabIndex', tab);
+                $('#tabs').tabs('select', idx);
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+
+        function btn_logout() {
+            new Admin().Logout({}, function () {
+                window.location.href = 'login.htm';
+            });
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,61 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta content="text/html; charset=utf-8" />
+    <link href="res/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="res/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="res/js/jquery.min.js" type="text/javascript"></script>
+    <script src="res/js/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="res/js/Configuration.js" type="text/javascript"></script>
+    <title></title>
+</head>
+<body>    <div style="margin:20px;">        <table cellpadding="0" cellspacing="0" border="0">        <tr>            <td>                <table id="pg" class="easyui-propertygrid" style="width:500px;"
+                    data-options="
+                    title: '&nbsp;注册信息',
+                    collapsible: true,
+                    showGroup: false,
+                    iconCls: 'icon-license',
+                    scrollbarSize: 0">
+                </table>
+            </td>            <td style="vertical-align:top; padding:0 20px 0 20px;">                <form id="ff" method="post" action="">
+                    <div><textarea id="lic" style="width:500px; height:120px;" title="Paste license key to there"></textarea></div>
+                    <br />
+                    <div><a id="btn_register" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">注册</a></div>
+                </form>
+            </td>        </tr>        </table>    </div>
+    <script type="text/javascript">
+        $(function () {
+            new Configuration().GetLicenseInfo({}, function (data) {
+                var rows = $(data.rows).map(function (k, v) {
+                    if (licDesc[v.name])
+                        return { name: licDesc[v.name], value: v.value };
+                });
+                $('#pg').propertygrid('loadData', rows);
+            });
+        });
+        $('#btn_register').click(function () {
+            if ($('#lic').val() == '')
+                return;
+            var val = $('#lic').val().replace(/\+/g, '*').replace(/\//g, '-').replace(/=/g, '_');
+            var ps = { lic: val };
+            new Configuration('POST').RegisterLicense(ps, function (data) {
+                if (data == true) {
+                    $.messager.alert('License', 'Register OK!', 'info', function () {
+                        window.location.reload();
+                    });
+                }
+                else {
+                    $.messager.alert('License', 'Register Fail!');
+                }
+            }); var a = new Array();
+        });
+        var licDesc = {
+            Version: '系统版本',
+            LicenseType: '授权类型',
+            MachineId: '设备ID',
+            CreateTime: '授权时间',
+            ExpireTime: '到期时间'
+        };
+    </script>
+</body>
+</html>

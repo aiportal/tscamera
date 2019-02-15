@@ -1,0 +1,205 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>视频回放</title>
+    <meta content="text/html; charset=utf-8" />
+    <link href="res/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="res/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="res/js/jquery.min.js" type="text/javascript"></script>
+    <script src="res/js/jquery.easyui.min.js" type="text/javascript"></script>
+
+    <script src="res/js/DataQuery.js" type="text/javascript"></script>
+    <script src="res/js/common.js" type="text/javascript"></script>
+    <style type="text/css">
+        #movie_panel
+        {
+            background: url(res/img/loading.gif) no-repeat center;
+            overflow: hidden;
+        }
+        #tool_panel
+        {
+            padding: 18px 15px 10px 15px;
+            overflow: hidden;
+        }
+        #pointer{
+            float:left; 
+            position:absolute; 
+            display:none;
+        }
+    </style>
+</head>
+<body>
+    <div id="main" class="easyui-layout" data-options="fit:true">
+        <div id="movie_panel" data-options="
+            region: 'center',
+            border: false,
+            noheader: false,
+            onOpen: movie_init
+        ">
+            <img id="pointer" src="res/img/pointer.png" alt="" />
+            <img id="movie_img" src="" alt="" width="100%" height="100%" />
+        </div>
+        <div id="tool_panel" data-options="
+            region:'south',
+            border: false,
+            onResize: tool_resize
+        ">
+            <div style="float:right; text-align:right;">
+                <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1',iconCls:'icon-run'" onclick="btn_play(3000);" title="Play"></a>
+                <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1',iconCls:'icon-fast'" onclick="btn_play(1000);" title="Fast"></a>
+                <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1',iconCls:'icon-pause'" onclick="btn_pause();" title="Pause"></a>
+                <a href="#" class="easyui-linkbutton" data-options="toggle:true,group:'g1',iconCls:'icon-stop'" onclick="btn_stop();" title="Stop"></a>
+            </div>
+            <div style="width:100px; padding-left:15px; ">
+                <input id="slider" class="easyui-slider" data-options="
+                    showTip:true, 
+                    onSlideStart:slider_changing, 
+                    onSlideEnd:slider_changed,
+                    tipFormatter: fmt_tip
+                "/>
+            </div>
+        </div>
+    </div>
+    
+    <script type="text/javascript">
+        var snapshots = [];
+        var running = false;
+        var timer = null;
+        var current = 0;
+        var duration = 3000;
+
+        function movie_init() {
+            var ps = {};
+            var p = url_parameters();
+            if (p.sid) {
+                p.sid = p.sid.replace('#', '');
+                if (p.host) {
+                    var ps = { sid: p.sid, host: p.host, url: p.url };
+                    new DataQuery().SnapshotsByUrl(ps, function (data) {
+                        if (data.length > 0) {
+                            snapshots = data;
+                            $('#slider').slider({ min: 0, max: snapshots.length - 1 });
+                            update_view(0);
+                        }
+                    });
+                }
+                else {
+                    var ps = { sid: p.sid, prog: p.prog, title: p.title };
+                    new DataQuery().SnapshotsByTitle(ps, function (data) {
+                        if (data.length > 0) {
+                            snapshots = data;
+                            $('#slider').slider({ min: 0, max: snapshots.length - 1 });
+                            update_view(0);
+                        }
+                    });
+                }
+            }
+        }
+
+        function tool_resize() {
+            var t = $('#tool_panel');
+            var w = t.width() - t.children().width() - 35;
+            $('#slider').slider('resize', { width: w });
+        }
+        // tipFormatter: function(val){ return val+1;},
+        function fmt_tip(val) {
+            if (val < snapshots.length)
+                return snapshots[val].Time;
+        }
+
+        function btn_play(dur) {
+            duration = dur;
+            if (!running) {
+                running = true;
+                update_view(current);
+            }
+        }
+        function btn_pause() {
+            running = false;
+            clearTimeout(timer);
+        }
+        function btn_stop() {
+            running = false;
+            clearTimeout(timer);
+            update_view(0);
+        }
+        function slider_changing(val) {
+            clearTimeout(timer);
+        }
+        function slider_changed(val) {
+            update_view(val);
+        }
+        function update_view(pos) {
+            if (pos < snapshots.length) {
+                var s = snapshots[pos];
+
+                var img = new Image();
+                img.onload = function () {
+                    img.title = s.Title + ' - ' + s.Prog;
+                    document.title = img.title;
+                    var mouse = s.Mouse;
+                    if (mouse && mouse.ClickOption > 0) {
+                        var x = Math.floor(mouse.X * $('#movie_img').width() / img.width);
+                        var y = Math.floor(mouse.Y * $('#movie_img').height() / img.height);
+                        $('#pointer').css('left', (x-6) + 'px');
+                        $('#pointer').css('top', (y) + 'px');
+                        $('#pointer').show();
+                    }
+                    else {
+                        $('#pointer').hide();
+                    }
+                    if (running) {
+                        timer = setTimeout(function () {
+                            update_view(++pos);
+                        }, duration);
+                    }
+                }
+                img.src = new DataQuery().GetImage({ ssid: s.SSID });
+                $('#movie_img').attr('src', img.src);
+
+//                var url = new DataQuery().GetImage({ ssid: s.SSID });
+//                var title = s.Title + ' - ' + s.Prog;
+//                $('#movie_img').attr('src', url);
+//                $('#movie_img').attr('title', title);
+//                //var mouse = s.Mouse;
+
+//                image_preload(pos);
+//                $('#movie_img').attr('onload', function () {
+//                    document.title = this.title;
+//                    $(document).attr("title", this.title);
+//                    if (running) {
+//                        timer = setTimeout(function () {
+//                            update_view(++pos);
+//                        }, 1000);
+//                    }
+//                });
+
+                current = pos;
+                $('#slider').slider('setValue', pos);
+                image_preload(pos);
+            }
+            else {
+                running = false;
+            }
+        }
+
+        function image_preload(pos) {
+            var count = 0;
+            for (var i = pos; i < snapshots.length; ++i) {
+                var s = snapshots[i];
+                if (s.image && s.image.complete) {
+                    continue;
+                }
+                else {
+                    var url = new DataQuery().GetImage({ ssid: s.SSID.replace(/-/g, '') });
+                    var img = new Image();
+                    img.src = url;
+                    s.image = img;
+                    if (++count > 10)
+                        break;
+                }
+            }
+        }
+    </script>
+</body>
+</html>

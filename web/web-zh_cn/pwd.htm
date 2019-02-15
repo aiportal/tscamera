@@ -1,0 +1,55 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta content="text/html; charset=utf-8" />
+    <link href="res/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="res/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="res/js/jquery.min.js" type="text/javascript"></script>
+    <script src="res/js/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="res/js/Configuration.js" type="text/javascript"></script>
+    <title></title>
+</head>
+<body>
+    <div style="margin: 20px;">
+        <div class="easyui-panel" title="&nbsp;修改管理密码" style="width: 400px" data-options="collapsible:true, iconCls:'icon-key'">
+            <form id="config" method="post" action="" data-options="onSubmit:">
+            <table cellpadding="0" cellspacing="10" border="0" style="margin:20px 50px 20px 50px;">
+                <tr><td>管理密码:</td>
+                    <td><input id="password" name="pwd" type="password" class="easyui-validatebox" data-options="required:true" style="width:150px;" /></td>
+                </tr>
+                <tr><td>确认密码:</td>
+                    <td><input id="confirm" type="password" class="easyui-validatebox" data-options="required:true" style="width:150px;" /></td>
+                </tr>
+            </table>
+            </form>
+            <div style="margin:0 50px 20px 0; text-align:right;">
+                <a id="btn_submit" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">修改</a>            </div>        </div>
+    </div>
+    <script type="text/javascript">
+        $('input').keypress(function (e) {
+            if (e.charCode==13 || e.charCode==10)
+                form_submit();
+        });
+        $('#btn_submit').click(function () {
+            form_submit();
+        });
+        
+        function form_submit(){
+            if ($('#password').val() == '')
+                return;
+            if ($('#password').val() == $('#confirm').val()) {
+                var p = { pwd: $('#password').val() };
+                new Configuration('POST').SetAdminPassword(p, function (data) {
+                    if (data == true)
+                        $.messager.alert('Password', 'Change password ok.');
+                    else
+                        $.messager.alert('Password', 'Change password fail.');
+                });
+            }
+            else {
+                $.messager.alert('Password', 'The passwords you typed do not match.');
+            }
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+﻿{"total":28,"rows":[
+	{"productid":"FI-SW-01","name":"OA办公系统","addr":"http://192.168.0.88/index.jsp","account":"wangwu","itemid":"EST-1", "login":"<a class='btn-login' href='#' iconCls='icon-user'>登录</a>"},
+	{"productid":"RP-SN-01","name":"Word","addr":"C:\\Program Files\\Microsoft Office\\word.exe","account":"","itemid":"EST-12", "login":"<a class='btn-login' href='#' iconCls='icon-chat'>使用</a>"},
+	{"productid":"RP-SN-01","name":"Excel","addr":"C:\\Program Files\\Microsoft Office\\excel.exe","account":"","itemid":"EST-13", "login":"<a class='btn-login' href='#' iconCls='icon-chat'>使用</a>"}
+]}

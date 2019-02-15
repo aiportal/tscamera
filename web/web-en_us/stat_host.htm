@@ -1,0 +1,189 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta content="text/html; charset=utf-8" />
+    <link href="res/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="res/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="res/js/jquery.min.js" type="text/javascript"></script>
+    <script src="res/js/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="res/js/datagrid-groupview.js" type="text/javascript"></script>
+
+    <script src="res/js/Statistic.js" type="text/javascript"></script>
+    <script src="res/js/common.js" type="text/javascript"></script>
+
+    <style type="text/css">
+        .time_range
+        {
+            float:left;
+            background: #0000cc;
+            color: #fff;
+            border-left: 1px dotted gray;
+            border-right: 1px dotted gray;
+        }
+        .range_line
+        {
+            margin-left: 33%;
+            width: 42%;
+            background-color: #D0D0D0;
+        }
+        .grid_body{ border-top-width: 0px; }
+    </style>
+
+    <title></title>
+</head>
+<body>
+    <table id="dgrid" title="">
+		<thead>
+			<tr>
+                <th field="Host" width="180" align="center" >Host</th>
+                <th field='Range' width="500" align="center" formatter="fmt_range" >Busyness</th>
+                <th field='Count' width="80" align="center" >SnapCount</th>
+                <th field='Percent' width="80" align="right" formatter="fmt_percent" >Percent(Day)</th>
+			</tr>
+		</thead>
+	</table>
+
+    <div style="display:none;">
+        <div id="toolbar" style="padding:5px;height:auto;">
+		    Date From: <input id="start" class="easyui-datebox" style="width:100px" required />
+		    To: <input id="end" class="easyui-datebox" style="width:100px" required />
+            User: <input id="user" class="easyui-combobox" style="width:160px;" />		    <a href="#" class="easyui-linkbutton" onclick="$('#dgrid').datagrid('load', this);" iconCls="icon-chart" >Statistic</a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-collapse" onclick="$('#dgrid').datagrid('collapseGroup');"></a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-expand" onclick="$('#dgrid').datagrid('expandGroup');"></a>
+            <div style="display:none; margin-top:5px;">
+                Filter:
+                <input id="filter" style="width:160px;" />
+            </div>
+	    </div>
+    </div>
+
+        <script type="text/javascript">
+            $(function () {
+                $('#start').datebox('setValue', date_value(0));
+                $('#end').datebox('setValue', date_value(0));
+                $('#user').combobox({
+                    editable: false,
+                    panelHeight: 'auto',
+                    valueField: 'Name',
+                    textField: 'Name',
+                    loader: function (param, success, error) {
+                        new Statistic().GetUsers(param, success, error);
+                    },
+                    onLoadSuccess: function (objs) {
+                        if (objs.length > 0)
+                            $('#user').combobox('select', objs[0].Name);
+                    }
+                });
+            });
+
+            $('#dgrid').datagrid({
+                noheader: true,
+                fit: true,
+                rownumbers: true,
+                striped: true,
+                showFooter: true,
+                singleSelect: true,
+                remoteSort: false,
+                bodyCls: 'grid_body',
+                toolbar: '#toolbar',
+                //sortName: 'Percent',
+                //sortOrder: 'desc',
+
+                // group
+                groupField: 'Date',
+                view: groupview,
+                groupFormatter: function (value, rows) {
+                    return '<a class="btn-group"><strong>' + value + '</strong> - ' + rows.length + ' Item(s)</a>';
+                },
+
+                // data
+                loader: function (param, success, error) {
+                    if (param && param.href) {
+                        param = {
+                            start: $('#start').datebox('getValue'),
+                            end: $('#end').datebox('getValue'),
+                            user: $('#user').datebox('getValue')
+                        };
+                        function filter(objs) {
+                            var max = 0;
+                            var total = [];
+                            $(objs).each(function (k, v) {
+                                var t = total[v.Date];
+                                total[v.Date] = (t ? t : 0) + v.Count;
+                                if (max < v.Count)
+                                    max = v.Count;
+                            });
+
+                            $(objs).each(function (k, v) {
+                                v.Range = (v.Count * 100 / max).toFixed(2);
+                                v.Percent = (v.Count * 100 / total[v.Date]).toFixed(2);
+                            });
+                            objs.sort(function (a, b) {
+                                return (a.Date != b.Date) ? str_compare(a.Date, b.Date) : (b.Count - a.Count);
+                            });
+
+                            success(objs);
+                            init_filter(objs, 'Host');
+                        }
+                        new Statistic().HostVisit(param, filter, error);
+                    }
+                    else {
+                        return false;
+                    }
+                },
+                onLoadSuccess: function (objs) {
+                    $('.btn-group').linkbutton({ iconCls: 'icon-calendar', plain: true })
+                        .click(function () { $('#dgrid').datagrid('toggleGroup', this); })
+                        .css('padding', '0 50px 0 50px');
+                },
+                onLoadError: function (objs) {
+                    $.messager.alert('Error', 'Request error.', 'error');
+                }
+            });
+
+            function fmt_percent(val, row) {
+                return val ? val + '%' : null;
+            }
+            function fmt_range(val, row) {
+                var left = '0%';
+                var width = val * 5 > 1 ? val + "%" : "1px";
+                var s = '<div class="time_range" style="margin-left:' + left + ';width:' + width + ';">&nbsp;</div>';
+                //'<div class="range_line">&nbsp;</div>';
+                return s;
+            }
+
+            function init_filter(objs, field) {
+                var t = {};
+                var rows = $(objs).map(function (k, v) {
+                    var name = v[field];
+                    if (!t[name]) {
+                        t[name] = name;
+                        return v;
+                    }
+                });
+                rows = $(rows).sort(function (a, b) { return str_compare(a[field], b[field]); });
+
+                $('#filter').combobox({
+                    //editable: false,
+                    //multiple: true,
+                    valueField: field,
+                    textField: field,
+                    data: rows,
+                    onChange: function () {
+                        var rows = objs;
+                        var name = $('#filter').combobox('getValue');
+                        if (name) {
+                            var rows = $(objs).map(function (k, v) {
+                                return v[field] == name ? v : null;
+                            });
+                        }
+                        $('#dgrid').datagrid('loadData', { total: rows.length, rows: rows });
+                    }
+                });
+                $('#filter').parent().show();
+            }
+
+    </script>
+
+</body>
+</html>

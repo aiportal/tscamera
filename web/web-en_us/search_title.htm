@@ -1,0 +1,135 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta content="text/html; charset=utf-8" />
+    <link href="res/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="res/themes/icon.css" rel="stylesheet" type="text/css" />
+
+    <script src="res/js/jquery.min.js" type="text/javascript"></script>
+    <script src="res/js/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="res/js/datagrid-groupview.js" type="text/javascript"></script>
+
+    <script src="res/js/DataQuery.js" type="text/javascript"></script>
+    <script src="res/js/common.js" type="text/javascript"></script>
+    <style type="text/css">
+        .grid_body{ border-top-width:0px; }
+    </style>
+</head>
+<body>
+    <table id="dgrid" title="">
+		<thead>
+			<tr>
+                <th field="User" width="100" align="center" sortable="true">User</th>
+                <th field="Date" width="80" align="center" sortable="true">Date</th>
+                <th field="Time" width="100" align="center" sortable="true" >Time</th>
+                <th field="Prog" width="80" align="center" sortable="true">Program</th>
+                <th field='Title' width="600" align="left" sortable="true" formatter="fmt_title" >Window Title</th>
+                <th field='Count' width="80" align="center" sortable="true">Snap Count</th>
+                <th field="_movie" align="center" >Movie</th>
+			</tr>
+		</thead>
+	</table>
+
+    <div style="display:none;">
+        <div id="toolbar" style="padding:5px;height:auto;">
+		    Date From: <input id="start" class="easyui-datebox" style="width:100px" required />
+		    To: <input id="end" class="easyui-datebox" style="width:100px" required />
+            User: <input id="user" style="width:120px;" />
+            Program: <input id="prog" style="width:120px;" />            Title: <input id="keyword" class="easyui-searchbox" searcher="do_search" style="width:160px;" />		    <a href="#" class="easyui-linkbutton" onclick="$('#dgrid').datagrid('load', this);">Search</a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-collapse" onclick="$('#dgrid').datagrid('collapseGroup');"></a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-expand" onclick="$('#dgrid').datagrid('expandGroup');"></a>
+	    </div>
+    </div>
+
+    <script type="text/javascript">
+        $(function () {
+            $('#start').datebox('setValue', date_value(0));
+            $('#end').datebox('setValue', date_value(0));
+            $('#user').combobox({
+                //editable: false,
+                panelHeight: 'auto',
+                valueField: 'Name',
+                textField: 'Name',
+                loader: function (param, success, error) {
+                    new DataQuery().GetUsers(param, success, error);
+                }
+            });
+            $('#prog').combobox({
+                //editable: false,
+                panelHeight: '300',
+                valueField: 'Name',
+                textField: 'Name',
+                loader: function (param, success, error) {
+                    new DataQuery().GetApplications(param, success, error);
+                }
+            });
+        });
+
+        $('#dgrid').datagrid({
+            noheader: true,
+            fit: true,
+            rownumbers: true,
+            striped: true,
+            showFooter: true,
+            singleSelect: true,
+            remoteSort: false,
+            bodyCls: 'grid_body',
+            toolbar: '#toolbar',
+
+            // group
+            groupField: 'Date',
+            view: groupview,
+            groupFormatter: function (value, rows) {
+                return '<a class="btn-group"><strong>' + value + '</strong> - ' + rows.length + ' Item(s)</a>';
+            },
+
+            // data
+            loader: function (param, success, error) {
+                if (param && param.href) {
+                    param = {
+                        start: $('#start').datebox('getValue'),
+                        end: $('#end').datebox('getValue'),
+                        user: $('#user').combobox('getValue'),
+                        prog: $('#prog').combobox('getValue'),
+                        title: $('#keyword').searchbox('getValue')
+                    };
+                    function filter(objs) {
+                        $(objs).each(function (k, v) {
+                            v._movie = '<a class="btn-movie" href="#"></a>';
+                        });
+                        success(objs);
+                    }
+                    new DataQuery().SearchTitle(param, filter, error);
+                }
+                else {
+                    return false;
+                }
+            },
+            onLoadSuccess: function (objs) {
+                $('.btn-movie').linkbutton({ text: 'Play', iconCls: 'icon-play' });
+                $('.btn-group').linkbutton({ iconCls: 'icon-calendar', plain: true })
+                    .click(function () { $('#dgrid').datagrid('toggleGroup', this); })
+                    .css('padding', '0 50px 0 50px');
+            },
+            onLoadError: function (objs) {
+                $.messager.alert('Error', 'Request error.', 'error');
+            },
+            onClickCell: function (idx, field, value) {
+                var row = $('#dgrid').datagrid('getRows')[idx];
+                if (field == '_movie')
+                    parent.$('body').trigger('onPopMovie', row);
+            }
+        });
+
+        function do_search() {
+            $('#dgrid').datagrid('load', window.location);
+        }
+        function fmt_title(val, row) {
+            return bold_format(val, $('#keyword').searchbox('getValue'));
+        }
+
+    </script>
+
+</body>
+</html>

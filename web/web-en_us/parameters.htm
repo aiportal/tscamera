@@ -1,0 +1,196 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta content="text/html; charset=utf-8" />
+    <link href="res/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="res/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="res/js/jquery.min.js" type="text/javascript"></script>
+    <script src="res/js/jquery.easyui.min.js" type="text/javascript"></script>
+
+    <script src="res/js/Configuration.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $.extend($.fn.datagrid.defaults.editors, {
+            password: {
+                init: function (container, options) {
+                    var input = $('<input type="password" class="datagrid-editable-input">').appendTo(container);
+                    return input;
+                },
+                destroy: function (target) {
+                    $(target).remove();
+                },
+                getValue: function (target) {
+                    return $(target).val();
+                },
+                setValue: function (target, value) {
+                    $(target).val(value);
+                },
+                resize: function (target, width) {
+                    $(target)._outerWidth(width);
+                }
+            }
+        });
+    </script>
+    <style type="text/css">
+    </style>
+</head>
+<body>
+    <div style="margin: 20px;">
+        <div class="easyui-panel" title="&nbsp;System Parameters" style="width:380px;" data-options="collapsible:true, iconCls:'icon-config'">
+	        <table id="pgrid"></table>
+        </div>        <div style="margin:20px 50px 20px 0; text-align:right; width:380px;">
+            <a id="btn_submit" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-ok'" onclick="on_apply();">Apply</a>            <a id="btn_reset" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-undo'" onclick="$('#pgrid').propertygrid('reload');">Reset</a>        </div>    </div>
+
+    <script type="text/javascript">
+
+        $('#pgrid').propertygrid({
+            border: false,
+            scrollbarSize: 0,
+            showGroup: true,
+            columns: [[
+                { field: 'name', title: 'Parameter', width: 180 },
+                { field: 'value', title: 'Value', width:200, formatter: fmt_value }
+            ]],
+            loader: function (param, success, error) {
+                function filter(objs) {
+                    var rows = [];
+                    $(objs).each(function (k, v) {
+                        var r = props[v.Name];
+                        if (r != null) {
+                            r.id = v.Name;
+                            r.value = v.Value;
+                            rows.push(r);
+                        }
+                    });
+                    success(rows);
+                }
+                new Configuration().GetConfigurations(param, filter, error);
+            }
+        });
+
+        function fmt_value(val, row, idx) {
+            if (row.id == 'DiskQuota')
+                return val + ' GB';
+            else if (row.id == 'DaysLimit')
+                return val + ' Days';
+            else if (row.id == 'ADPassword')
+                return (val && val.length > 0) ? "********" : null;
+            else
+                return val;
+        }
+        function on_apply() {
+            var ps = {};
+            var data = $('#pgrid').propertygrid('getData');
+            $(data.rows).each(function (k, v) {
+                ps[v.id] = v.value;
+            });
+            new Configuration('POST').SetConfigurations(ps,
+                function (data) {
+                    if (data == true) {
+                        $.messager.show({ title: 'Configuraion', msg: 'Apply ok.', timeout:5000, showType: 'show' });
+                        $('#pgrid').propertygrid('reload');
+                    }
+                    else {
+                        $.messager.alert('Configuraion', 'Apply fail!');
+                    }
+                },
+                function (msg) {
+                    $.messager.alert('Configuraion', 'Apply fail!');
+                }
+            );
+        }
+
+        var groups = [
+            'System Parameters',
+            'Data Limit',
+            'Access Rule',
+            'LDAP Configuration'
+        ];
+        var props = {
+            RecordEnabled: {
+                name: 'Monitor Enabled',
+                group: groups[0],
+                editor: {
+                    type: 'checkbox',
+                    options: { 'on': 'True', 'off': 'False' }
+                }
+            },
+            IconVisible: {
+                name: 'TrayIcon Visible',
+                group: groups[0],
+                editor: {
+                    type: 'checkbox',
+                    options: { 'on': 'True', 'off': 'False' }
+                }
+            },
+            GrayScale: {
+                name: 'GrayScale Image',
+                group: groups[0],
+                editor: {
+                    type: 'checkbox',
+                    options: { 'on': 'True', 'off': 'False' }
+                }
+            },
+            Compress: {
+                name: 'Compress Image',
+                group: groups[0],
+                editor: {
+                    type: 'checkbox',
+                    options: { 'on': 'True', 'off': 'False' }
+                }
+            },
+            DiskQuota: {
+                name: 'Disk Quote',
+                group: groups[1],
+                editor: {
+                    type: 'numberbox',
+                    options: { 'min': 0, 'max': 1024 }
+                }
+            },
+            DaysLimit: {
+                name: 'Days Persist',
+                group: groups[1],
+                editor: {
+                    type: 'numberbox',
+                    options: { 'min': 0, 'max': 365 }
+                }
+            },
+            ADPath: {
+                name: 'Domain Name',
+                group: groups[3],
+                editor: { type: 'text' }
+            },
+            ADUser: {
+                name: 'Manager Name',
+                group: groups[3],
+                editor: { type: 'text' }
+            },
+            ADPassword: {
+                name: 'Manager Password',
+                group: groups[3],
+                editor: { type: 'password' }
+            },
+            ADOrganization: {
+                name: 'Organizational Unit',
+                group: groups[3],
+                editor: { type: 'text' }
+            },
+            ForbidUsers: {
+                name: 'Forbid Local Users',
+                group: groups[2],
+                editor: {
+                    type: 'checkbox',
+                    options: { 'on': 'True', 'off': 'False' }
+                }
+            },
+            PermitAddress: {
+                name: 'Permit Remote Address',
+                group: groups[2],
+                editor: { type: 'text' }
+            }
+        };
+
+    </script>
+    
+</body>
+</html>

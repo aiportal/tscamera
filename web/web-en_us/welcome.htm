@@ -1,0 +1,64 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta content="text/html; charset=utf-8" />
+    <link href="res/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="res/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="res/js/jquery.min.js" type="text/javascript"></script>
+    <script src="res/js/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="res/js/Configuration.js" type="text/javascript"></script>
+</head>
+<body>    <div style="margin:20px;">        <table cellpadding="0" cellspacing="0" border="0">        <tr>            <td>                <table id="pg" class="easyui-propertygrid" style="width:500px;"
+                    data-options="
+                    title: '&nbsp;License Info',
+                    collapsible: true,
+                    showGroup: false,
+                    showHeader: false,
+                    iconCls: 'icon-info',
+                    scrollbarSize: 0">
+                </table>
+            </td>
+            <td id="div_register" style="vertical-align:top; text-align:center; padding:20px 20px 20px 30px;">
+                <div>
+                    <a id="lnk_buy" href="http://www.ultragis.com/order.htm" target="_blank"><img src="res/img/buy.gif" alt="Buy Now" style="border:0px;" /></a>
+                </div>
+                <div style="padding-top:40px; text-align:center;">
+                    <a id="btn_register" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-license'" onclick="open_license();" 
+                        title="Register by license key">Register&nbsp;</a>
+                </div>
+            </td>
+            <td id="div_adware" style="vertical-align:top; padding:0px 20px 20px 0px;">
+                <div style="margin-top:0px;">
+                    <a href="http://www.softpedia.com/progClean/Terminal-Camera-Clean-243459.html" target="_blank">
+                        <img src="res/img/softpedia.gif" alt="100% CLEAN award granted by Softpedia" border="0" /></a>
+                </div>
+            </td>
+        </tr>
+        </table>
+    </div>
+    <script type="text/javascript">
+        $(function () {
+            loadLicense();
+        });
+        function loadLicense() {
+            new Configuration().GetLicenseInfo({}, function (data) {
+                var lic = {};
+                $(data.rows).each(function (k, v) { lic[v.name] = v.value; });
+                $('#lnk_buy').attr('href', 'http://www.ultragis.com/order.htm?MachineId=' + lic.MachineId);
+                data.rows.push({ name: 'Support', value: '<a href="mailto:support@ultragis.com?Subject=TSCamera">support@ultragis.com</a>' });
+                $('#pg').propertygrid('loadData', data);
+            });
+        }
+        function open_license() {
+            var options = {
+                id: 'license',
+                title: 'License',
+                icon: 'icon-license',
+                page: 'license.htm'
+            };
+            parent.$('body').trigger('onOpenPage', options);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "web", "web.csproj", "{71C32AE9-A7B9-463A-A947-EE1554C00005}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Document", "Document", "{0FE877BB-820F-490C-9F39-EA71BC258010}"
+	ProjectSection(SolutionItems) = preProject
+		..\plan.txt = ..\plan.txt
+		..\Version.txt = ..\Version.txt
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{71C32AE9-A7B9-463A-A947-EE1554C00005}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71C32AE9-A7B9-463A-A947-EE1554C00005}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71C32AE9-A7B9-463A-A947-EE1554C00005}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71C32AE9-A7B9-463A-A947-EE1554C00005}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

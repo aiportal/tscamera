@@ -1,0 +1,275 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{71C32AE9-A7B9-463A-A947-EE1554C00005}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>web</RootNamespace>
+    <AssemblyName>web</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <UseIISExpress>false</UseIISExpress>
+    <SccProjectName>Svn</SccProjectName>
+    <SccLocalPath>Svn</SccLocalPath>
+    <SccAuxPath>Svn</SccAuxPath>
+    <SccProvider>SubversionScc</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="web-en_us\license.htm" />
+    <Content Include="web-en_us\login.htm" />
+    <Content Include="web-en_us\main.htm" />
+    <Content Include="web-en_us\movie.htm" />
+    <Content Include="web-en_us\pwd.htm" />
+    <Content Include="web-en_us\res\img\pointer.png" />
+    <Content Include="web-en_us\res\img\softpedia.gif" />
+    <Content Include="web-en_us\res\js\datagrid-groupview.js" />
+    <Content Include="web-en_us\res\themes\icons\chart.png" />
+    <Content Include="web-en_us\res\themes\icons\collapse.png" />
+    <Content Include="web-en_us\res\themes\icons\computer.png" />
+    <Content Include="web-en_us\res\themes\icons\config.png" />
+    <Content Include="web-en_us\res\themes\icons\email.png" />
+    <Content Include="web-en_us\res\themes\icons\expand.png" />
+    <Content Include="web-en_us\res\themes\icons\fast.png" />
+    <Content Include="web-en_us\res\themes\icons\filter.png" />
+    <Content Include="web-en_us\res\themes\icons\folder.png" />
+    <Content Include="web-en_us\res\themes\icons\group.png" />
+    <Content Include="web-en_us\res\themes\icons\html.png" />
+    <Content Include="web-en_us\res\themes\icons\keyboard.png" />
+    <Content Include="web-en_us\res\themes\icons\license.png" />
+    <Content Include="web-en_us\res\themes\icons\offline.png" />
+    <Content Include="web-en_us\res\themes\icons\online.png" />
+    <Content Include="web-en_us\res\themes\icons\options.png" />
+    <Content Include="web-en_us\res\themes\icons\play-movie.png" />
+    <Content Include="web-en_us\res\themes\icons\question.png" />
+    <Content Include="web-en_us\res\themes\icons\web.png" />
+    <Content Include="web-en_us\sessions.htm" />
+    <Content Include="web-en_us\snapshots.htm" />
+    <Content Include="web-en_us\stat_host.htm" />
+    <Content Include="web-en_us\stat_hour.htm" />
+    <Content Include="web-en_us\stat_prog.htm" />
+    <Content Include="web-en_us\welcome.htm" />
+    <Content Include="web-en_us\favicon.ico" />
+    <Content Include="web-en_us\res\img\buy.gif" />
+    <Content Include="web-en_us\res\img\error.png" />
+    <Content Include="web-en_us\res\img\key.png" />
+    <Content Include="web-en_us\res\img\loading.gif" />
+    <Content Include="web-en_us\res\img\login.png" />
+    <Content Include="web-en_us\res\img\login_logo.png" />
+    <Content Include="web-en_us\res\img\logo.png" />
+    <Content Include="web-en_us\res\img\user.png" />
+    <Content Include="web-en_us\res\js\common.js" />
+    <Content Include="web-en_us\res\js\Configuration.js" />
+    <Content Include="web-en_us\res\js\DataQuery.js" />
+    <Content Include="web-en_us\res\js\easyloader.js" />
+    <Content Include="web-en_us\res\js\jquery.easyui.min.js" />
+    <Content Include="web-en_us\res\js\jquery.md5.js" />
+    <Content Include="web-en_us\res\js\jquery.min.js" />
+    <Content Include="web-en_us\res\js\locale\easyui-lang-af.js" />
+    <Content Include="web-en_us\res\js\locale\easyui-lang-ar.js" />
+    <Content Include="web-en_us\res\js\locale\easyui-lang-bg.js" />
+    <Content Include="web-en_us\res\js\locale\easyui-lang-ca.js" />
+    <Content Include="web-en_us\res\js\locale\easyui-lang-cs.js" />
+    <Content Include="web-en_us\res\js\locale\easyui-lang-cz.js" />
+    <Content Include="web-en_us\res\js\locale\easyui-lang-da.js" />
+    <Content Include="web-en_us\res\js\locale\easyui-lang-de.js" />
+    <Content Include="web-en_us\res\js\locale\easyui-lang-el.js" />
+    <Content Include="web-en_us\res\js\locale\easyui-lang-en.js" />
+    <Content Include="web-en_us\res\js\locale\easyui-lang-es.js" />
+    <Content Include="web-en_us\res\js\locale\easyui-lang-fr.js" />
+    <Content Include="web-en_us\res\js\locale\easyui-lang-it.js" />
+    <Content Include="web-en_us\res\js\locale\easyui-lang-jp.js" />
+    <Content Include="web-en_us\res\js\locale\easyui-lang-nl.js" />
+    <Content Include="web-en_us\res\js\locale\easyui-lang-pl.js" />
+    <Content Include="web-en_us\res\js\locale\easyui-lang-pt_BR.js" />
+    <Content Include="web-en_us\res\js\locale\easyui-lang-ru.js" />
+    <Content Include="web-en_us\res\js\locale\easyui-lang-sv_SE.js" />
+    <Content Include="web-en_us\res\js\locale\easyui-lang-tr.js" />
+    <Content Include="web-en_us\res\js\locale\easyui-lang-zh_CN.js" />
+    <Content Include="web-en_us\res\js\locale\easyui-lang-zh_TW.js" />
+    <Content Include="web-en_us\res\js\plugins\jquery.accordion.js" />
+    <Content Include="web-en_us\res\js\plugins\jquery.calendar.js" />
+    <Content Include="web-en_us\res\js\plugins\jquery.combo.js" />
+    <Content Include="web-en_us\res\js\plugins\jquery.combobox.js" />
+    <Content Include="web-en_us\res\js\plugins\jquery.combogrid.js" />
+    <Content Include="web-en_us\res\js\plugins\jquery.combotree.js" />
+    <Content Include="web-en_us\res\js\plugins\jquery.datagrid.js" />
+    <Content Include="web-en_us\res\js\plugins\jquery.datebox.js" />
+    <Content Include="web-en_us\res\js\plugins\jquery.datetimebox.js" />
+    <Content Include="web-en_us\res\js\plugins\jquery.dialog.js" />
+    <Content Include="web-en_us\res\js\plugins\jquery.draggable.js" />
+    <Content Include="web-en_us\res\js\plugins\jquery.droppable.js" />
+    <Content Include="web-en_us\res\js\plugins\jquery.form.js" />
+    <Content Include="web-en_us\res\js\plugins\jquery.layout.js" />
+    <Content Include="web-en_us\res\js\plugins\jquery.linkbutton.js" />
+    <Content Include="web-en_us\res\js\plugins\jquery.menu.js" />
+    <Content Include="web-en_us\res\js\plugins\jquery.menubutton.js" />
+    <Content Include="web-en_us\res\js\plugins\jquery.messager.js" />
+    <Content Include="web-en_us\res\js\plugins\jquery.numberbox.js" />
+    <Content Include="web-en_us\res\js\plugins\jquery.numberspinner.js" />
+    <Content Include="web-en_us\res\js\plugins\jquery.pagination.js" />
+    <Content Include="web-en_us\res\js\plugins\jquery.panel.js" />
+    <Content Include="web-en_us\res\js\plugins\jquery.parser.js" />
+    <Content Include="web-en_us\res\js\plugins\jquery.progressbar.js" />
+    <Content Include="web-en_us\res\js\plugins\jquery.propertygrid.js" />
+    <Content Include="web-en_us\res\js\plugins\jquery.resizable.js" />
+    <Content Include="web-en_us\res\js\plugins\jquery.searchbox.js" />
+    <Content Include="web-en_us\res\js\plugins\jquery.slider.js" />
+    <Content Include="web-en_us\res\js\plugins\jquery.spinner.js" />
+    <Content Include="web-en_us\res\js\plugins\jquery.splitbutton.js" />
+    <Content Include="web-en_us\res\js\plugins\jquery.tabs.js" />
+    <Content Include="web-en_us\res\js\plugins\jquery.timespinner.js" />
+    <Content Include="web-en_us\res\js\plugins\jquery.tooltip.js" />
+    <Content Include="web-en_us\res\js\plugins\jquery.tree.js" />
+    <Content Include="web-en_us\res\js\plugins\jquery.treegrid.js" />
+    <Content Include="web-en_us\res\js\plugins\jquery.validatebox.js" />
+    <Content Include="web-en_us\res\js\plugins\jquery.window.js" />
+    <Content Include="web-en_us\res\js\purl.js" />
+    <Content Include="web-en_us\res\js\Statistic.js" />
+    <Content Include="web-en_us\res\themes\default\accordion.css" />
+    <Content Include="web-en_us\res\themes\default\calendar.css" />
+    <Content Include="web-en_us\res\themes\default\combo.css" />
+    <Content Include="web-en_us\res\themes\default\combobox.css" />
+    <Content Include="web-en_us\res\themes\default\datagrid.css" />
+    <Content Include="web-en_us\res\themes\default\datebox.css" />
+    <Content Include="web-en_us\res\themes\default\dialog.css" />
+    <Content Include="web-en_us\res\themes\default\easyui.css" />
+    <Content Include="web-en_us\res\themes\default\images\accordion_arrows.png" />
+    <Content Include="web-en_us\res\themes\default\images\blank.gif" />
+    <Content Include="web-en_us\res\themes\default\images\calendar_arrows.png" />
+    <Content Include="web-en_us\res\themes\default\images\combo_arrow.png" />
+    <Content Include="web-en_us\res\themes\default\images\datagrid_icons.png" />
+    <Content Include="web-en_us\res\themes\default\images\datebox_arrow.png" />
+    <Content Include="web-en_us\res\themes\default\images\layout_arrows.png" />
+    <Content Include="web-en_us\res\themes\default\images\linkbutton_bg.png" />
+    <Content Include="web-en_us\res\themes\default\images\loading.gif" />
+    <Content Include="web-en_us\res\themes\default\images\menu_arrows.png" />
+    <Content Include="web-en_us\res\themes\default\images\messager_icons.png" />
+    <Content Include="web-en_us\res\themes\default\images\pagination_icons.png" />
+    <Content Include="web-en_us\res\themes\default\images\panel_tools.png" />
+    <Content Include="web-en_us\res\themes\default\images\searchbox_button.png" />
+    <Content Include="web-en_us\res\themes\default\images\slider_handle.png" />
+    <Content Include="web-en_us\res\themes\default\images\spinner_arrows.png" />
+    <Content Include="web-en_us\res\themes\default\images\tabs_icons.png" />
+    <Content Include="web-en_us\res\themes\default\images\tree_icons.png" />
+    <Content Include="web-en_us\res\themes\default\images\validatebox_warning.png" />
+    <Content Include="web-en_us\res\themes\default\layout.css" />
+    <Content Include="web-en_us\res\themes\default\linkbutton.css" />
+    <Content Include="web-en_us\res\themes\default\menu.css" />
+    <Content Include="web-en_us\res\themes\default\menubutton.css" />
+    <Content Include="web-en_us\res\themes\default\messager.css" />
+    <Content Include="web-en_us\res\themes\default\pagination.css" />
+    <Content Include="web-en_us\res\themes\default\panel.css" />
+    <Content Include="web-en_us\res\themes\default\progressbar.css" />
+    <Content Include="web-en_us\res\themes\default\propertygrid.css" />
+    <Content Include="web-en_us\res\themes\default\searchbox.css" />
+    <Content Include="web-en_us\res\themes\default\slider.css" />
+    <Content Include="web-en_us\res\themes\default\spinner.css" />
+    <Content Include="web-en_us\res\themes\default\splitbutton.css" />
+    <Content Include="web-en_us\res\themes\default\tabs.css" />
+    <Content Include="web-en_us\res\themes\default\tooltip.css" />
+    <Content Include="web-en_us\res\themes\default\tree.css" />
+    <Content Include="web-en_us\res\themes\default\validatebox.css" />
+    <Content Include="web-en_us\res\themes\default\window.css" />
+    <Content Include="web-en_us\res\themes\icon.css" />
+    <Content Include="web-en_us\res\themes\icons\back.png" />
+    <Content Include="web-en_us\res\themes\icons\blank.gif" />
+    <Content Include="web-en_us\res\themes\icons\calendar.png" />
+    <Content Include="web-en_us\res\themes\icons\cancel.png" />
+    <Content Include="web-en_us\res\themes\icons\chat.png" />
+    <Content Include="web-en_us\res\themes\icons\clock.png" />
+    <Content Include="web-en_us\res\themes\icons\cut.png" />
+    <Content Include="web-en_us\res\themes\icons\edit_add.png" />
+    <Content Include="web-en_us\res\themes\icons\edit_remove.png" />
+    <Content Include="web-en_us\res\themes\icons\error.png" />
+    <Content Include="web-en_us\res\themes\icons\filesave.png" />
+    <Content Include="web-en_us\res\themes\icons\films.png" />
+    <Content Include="web-en_us\res\themes\icons\help.png" />
+    <Content Include="web-en_us\res\themes\icons\info.png" />
+    <Content Include="web-en_us\res\themes\icons\info2.png" />
+    <Content Include="web-en_us\res\themes\icons\key.png" />
+    <Content Include="web-en_us\res\themes\icons\list.png" />
+    <Content Include="web-en_us\res\themes\icons\lock.png" />
+    <Content Include="web-en_us\res\themes\icons\menu.png" />
+    <Content Include="web-en_us\res\themes\icons\mini_add.png" />
+    <Content Include="web-en_us\res\themes\icons\mini_edit.png" />
+    <Content Include="web-en_us\res\themes\icons\mini_refresh.png" />
+    <Content Include="web-en_us\res\themes\icons\movie.png" />
+    <Content Include="web-en_us\res\themes\icons\no.png" />
+    <Content Include="web-en_us\res\themes\icons\ok.png" />
+    <Content Include="web-en_us\res\themes\icons\pause.png" />
+    <Content Include="web-en_us\res\themes\icons\pencil.png" />
+    <Content Include="web-en_us\res\themes\icons\play.png" />
+    <Content Include="web-en_us\res\themes\icons\print.png" />
+    <Content Include="web-en_us\res\themes\icons\program.png" />
+    <Content Include="web-en_us\res\themes\icons\redo.png" />
+    <Content Include="web-en_us\res\themes\icons\reload.png" />
+    <Content Include="web-en_us\res\themes\icons\search.png" />
+    <Content Include="web-en_us\res\themes\icons\segment.png" />
+    <Content Include="web-en_us\res\themes\icons\stop.png" />
+    <Content Include="web-en_us\res\themes\icons\sum.png" />
+    <Content Include="web-en_us\res\themes\icons\tip.png" />
+    <Content Include="web-en_us\res\themes\icons\undo.png" />
+    <Content Include="web-en_us\res\themes\icons\user.png" />
+    <Content Include="web-en_us\res\themes\icons\window.png" />
+    <Content Include="web-en_us\parameters.htm" />
+    <Content Include="web-en_us\search_url.htm" />
+    <Content Include="web-en_us\policy.htm" />
+    <Content Include="web-en_us\search_file.htm" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="web-en_us\search_title.htm" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>False</AutoAssignPort>
+          <DevelopmentServerPort>1066</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>
+          </IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
